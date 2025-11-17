@@ -1,6 +1,10 @@
+import { Container } from "react-bootstrap";
+
 function Home() {
   return (
-    <h1>Welcome Home!</h1>
+    <Container className="ms-10">
+      <h1>Welcome Home !</h1>
+    </Container>
   );
 }
 
