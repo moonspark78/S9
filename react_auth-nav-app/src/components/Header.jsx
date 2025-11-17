@@ -1,5 +1,5 @@
 import { Navbar, Nav, Container } from "react-bootstrap";
-import { LinkContainer } from "react-router-bootstrap";
+import { Link } from "react-router";
 
 function Header() {
   return (
@@ -7,16 +7,18 @@ function Header() {
       <Container>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="ms-auto" >
-            <LinkContainer to="/">
-              <Nav.Link as="span">Accueil</Nav.Link>
-            </LinkContainer>
-            <LinkContainer to="/categorie/vetements">
-              <Nav.Link as="span">Vêtements</Nav.Link>
-            </LinkContainer>
-            <LinkContainer to="/categorie/chaussures">
-              <Nav.Link as="span">Chaussures</Nav.Link>
-            </LinkContainer>
+          <Nav className="ms-auto">
+            <Nav.Link as={Link} to="/" className="cursor-pointer">
+              Accueil
+            </Nav.Link>
+
+            <Nav.Link as={Link} to="/categorie/vetements" className="cursor-pointer">
+              Vêtements
+            </Nav.Link>
+
+            <Nav.Link as={Link} to="/categorie/chaussures" className="cursor-pointer">
+              Chaussures
+            </Nav.Link>
           </Nav>
         </Navbar.Collapse>
       </Container>
