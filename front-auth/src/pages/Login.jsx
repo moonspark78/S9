@@ -45,6 +45,7 @@ const LoginPage = () => {
       );
 
       const data = await response.json();
+
       if (!response.ok) {
         const customError = new Error(
           data.message || "Une erreur est survenue."
@@ -52,6 +53,19 @@ const LoginPage = () => {
         customError.status = response.status;
         throw customError;
       }
+
+
+      localStorage.setItem(
+        "auth",
+        JSON.stringify({
+          token: data.access_token,
+          expiresAt: new Date(
+            Date.now() + data.expires_in * 1000
+          ).toISOString(),
+          user: data.user,
+        })
+      );
+      
       navigate("/offres/professionnelles");
     } catch (err) {
       console.error(err);

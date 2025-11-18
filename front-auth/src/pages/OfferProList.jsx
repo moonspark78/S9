@@ -10,12 +10,15 @@ const OfferProList = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
+        const auth = JSON.parse(localStorage.getItem("auth"));
         const response = await fetch(
           "https://offers-api.digistos.com/api/offers/pro",
           {
             headers: {
               Accept: "application/json",
               // Add Authorization token
+              Authorization: `Bearer ${auth?.token}`,
+
             },
           }
         );
