@@ -55,7 +55,11 @@ const LoginPage = () => {
       navigate("/offres/professionnelles");
     } catch (err) {
       console.error(err);
-      setError("Email ou mot de passe incorrect.");
+      if (err.status === 401) {
+        setError("Email ou mot de passe incorrect.");
+      } else {
+        setError("Une erreur est survenue. Veuillez réessayer plus tard.");
+      }
     } finally {
       setLoading(false);
     }
