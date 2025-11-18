@@ -1,10 +1,18 @@
 import { useState } from "react";
-import { Form, Button, Container, Card, Row, Col } from "react-bootstrap";
+import {
+  Form,
+  Button,
+  Container,
+  Card,
+  Row,
+  Col,
+  Alert,
+} from "react-bootstrap";
 import { useNavigate } from "react-router";
 
 const Register = () => {
   const navigate = useNavigate();
-  const [error, setError] = useState("");
+  const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
@@ -37,25 +45,15 @@ const Register = () => {
         }
       );
       // Don't forget to handle errors, both for yourself (dev) and for the client (via a Bootstrap Alert)
-      const data = await response.json(); 
-      console.log("→ Request sent:", formData);
-      console.log("→ Response status:", response.status);
-      console.log("→ Response data:", data);
-
-      // Redirect to Login on success
-      if (response.status === 201) {
-        console.log("Inscription réussie !");
-        navigate("/connexion");
-      } else if (response.status === 422) {
-        console.log("Erreur de validation :", response);
-        setError("Erreur de validation : vérifiez vos champs.");
-      } else {
-        console.log("Erreur inconnue :", response);
-        setError("Une erreur inconnue est survenue.");
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.message || "Une erreur est survenue.");
       }
+      // Redirect to Login on success
+      navigate("/connexion");
     } catch (err) {
-      console.log("Erreur réseau ou serveur :", err);
-      setError("Erreur réseau ou serveur.");
+      console.error(err);
+      setError(err.message); 
     } finally {
       setLoading(false);
     }
@@ -68,6 +66,11 @@ const Register = () => {
         <Col xs={12} sm={8} md={6} lg={4}>
           <Card className="p-4 shadow-lg">
             <h1 className="text-center mb-4">Créer un compte</h1>
+            {error && (
+              <Alert variant="danger" className="text-center">
+                {error}
+              </Alert>
+            )}
             <Form onSubmit={handleSubmit}>
               <Form.Group className="mb-3" controlId="formEmail">
                 <Form.Label>Email</Form.Label>
