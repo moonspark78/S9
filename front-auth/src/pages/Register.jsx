@@ -1,7 +1,11 @@
 import { useState } from "react";
 import { Form, Button, Container, Card, Row, Col } from "react-bootstrap";
+import { useNavigate } from "react-router";
 
 const Register = () => {
+  const navigate = useNavigate();
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
     name: "",
@@ -15,11 +19,46 @@ const Register = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
+    setLoading(true);
     // Handle signup logic here
-    // Don't forget to handle errors, both for yourself (dev) and for the client (via a Bootstrap Alert)
-    // Redirect to Login on success
+    try {
+      const response = await fetch(
+        "https://offers-api.digistos.com/api/auth/register",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify(formData),
+        }
+      );
+      // Don't forget to handle errors, both for yourself (dev) and for the client (via a Bootstrap Alert)
+      const data = await response.json(); 
+      console.log("→ Request sent:", formData);
+      console.log("→ Response status:", response.status);
+      console.log("→ Response data:", data);
+
+      // Redirect to Login on success
+      if (response.status === 201) {
+        console.log("Inscription réussie !");
+        navigate("/connexion");
+      } else if (response.status === 422) {
+        console.log("Erreur de validation :", response);
+        setError("Erreur de validation : vérifiez vos champs.");
+      } else {
+        console.log("Erreur inconnue :", response);
+        setError("Une erreur inconnue est survenue.");
+      }
+    } catch (err) {
+      console.log("Erreur réseau ou serveur :", err);
+      setError("Erreur réseau ou serveur.");
+    } finally {
+      setLoading(false);
+    }
     console.log("Form submitted:", formData);
   };
 
