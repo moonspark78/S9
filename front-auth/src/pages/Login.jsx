@@ -39,19 +39,25 @@ const LoginPage = () => {
     // Don't forget to handle errors, both for yourself (dev) and for the client (via a Bootstrap Alert):
      if (!response.ok) {
     //   - Show an error if credentials are invalid
-     if (response.status === 401) {
-          throw new Error("Email ou mot de passe incorrect.");
+    
     //   - Show a generic error for all other cases
-     } else {
-          // Sinon erreur générique
-          throw new Error(`Erreur ${response.status} - ${data.message || "Une erreur est survenue."}`);
-        }
+     const customError = new Error(data.message || "Une erreur est survenue.");
+      customError.status = response.status;
+      throw customError;
+      // Sinon erreur générique
+          
       }
     // On success, redirect to the Pro Offers page
      navigate("/offres/professionnelles");
      } catch (err) {
       console.error(err);
-      setError("Une erreur est survenue. Veuillez vérifier vos identifiants et réessayer.");
+       if (err.status === 401) {
+      setError("Email ou mot de passe incorrect.");
+    } else if (err.status === 404) {
+      setError("Email inconnu.");
+    } else {
+      setError("Une erreur est survenue. Veuillez réessayer.");
+    }
     } finally {
       setLoading(false);
     }
