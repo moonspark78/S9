@@ -29,7 +29,7 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError("");
+    setError(null);
     setLoading(true);
     // Handle signup logic here
     try {
@@ -47,13 +47,13 @@ const Register = () => {
       // Don't forget to handle errors, both for yourself (dev) and for the client (via a Bootstrap Alert)
       const data = await response.json();
       if (!response.ok) {
-        throw new Error(data.message || "Une erreur est survenue.");
+        throw new Error(`${response.status} - ${data.message || "Erreur serveur"}`);
       }
       // Redirect to Login on success
       navigate("/connexion");
     } catch (err) {
       console.error(err);
-      setError(err.message); 
+      setError("Une erreur est survenue. Veuillez réessayer.");
     } finally {
       setLoading(false);
     }
