@@ -23,11 +23,11 @@ const Offer = () => {
           }
         );
 
-        const data = await response.json();
-
-        if (!response.ok)
-          throw new Error(data.message || `Erreur ${response.status}`);
-        setOffer(data);
+        const { data: offers, message } = await response.json();
+        if (!response.ok) {
+          throw { status: response.status, message: message };
+        }
+        setOffer(offers);
       } catch (err) {
         console.error(err);
         setError(err.message);
