@@ -18,27 +18,33 @@ const Offer = () => {
           {
             headers: {
               Accept: "application/json",
+              // Add Authorization token
               Authorization: `Bearer ${token}`,
             },
           }
         );
 
         const { data: offers, message } = await response.json();
+        
         if (!response.ok) {
           throw { status: response.status, message: message };
         }
+
         setOffer(offers);
       } catch (err) {
-        console.error(err);
-        setError(err.message);
+        if (err.status === 403) {
+          setError("Accès non autorisé (403).");
+        } else {
+          setError("Erreur lors du chargement de l'offre.");
+        }
+        console.error(err.message || err);
       } finally {
         setLoading(false);
       }
     };
 
-    if (token) fetchOffer();
-    else setError("Utilisateur non connecté.");
-  }, [id, token]);
+    fetchOffer();
+  }, [id]);
 
   if (loading)
     return <Spinner animation="border" className="d-block mx-auto mt-5" />;
