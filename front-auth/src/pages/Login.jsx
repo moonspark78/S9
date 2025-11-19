@@ -44,9 +44,15 @@ const LoginPage = () => {
         }
       );
 
-      const data = await response.json();
-
+      
       if (!response.ok) {
+        let data = {};
+        try {
+          data = await response.json();
+        } catch (e) {
+          
+        }
+
         const customError = new Error(
           data.message || "Une erreur est survenue."
         );
@@ -54,6 +60,8 @@ const LoginPage = () => {
         throw customError;
       }
 
+      
+      const data = await response.json();
 
       localStorage.setItem(
         "auth",
@@ -65,16 +73,19 @@ const LoginPage = () => {
           user: data.user,
         })
       );
-      
+
       navigate("/offres/professionnelles");
     } catch (err) {
       console.error(err);
-      setError("Email ou mot de passe incorrect.");
+
+      if (err.status === 401) {
+        setError("Email ou mot de passe incorrect.");
+      } else {
+        setError("Une erreur est survenue. Veuillez réessayer plus tard.");
+      }
     } finally {
       setLoading(false);
     }
-
-    console.log("Login submitted:", formData);
   };
 
   return (
@@ -111,8 +122,8 @@ const LoginPage = () => {
                 />
               </Form.Group>
 
-              <Button variant="primary" type="submit" className="w-100">
-                Se connecter
+              <Button variant="primary" type="submit" className="w-100" disabled={loading}>
+                {loading ? "Chargement..." : "Se connecter"}
               </Button>
             </Form>
           </Card>
