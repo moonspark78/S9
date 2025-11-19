@@ -5,7 +5,11 @@ import "../assets/styles/Header.css";
 
 function Header() {
   const auth = useSelector((state) => state.auth.user); 
-  const isLogged = !!auth?.token; 
+  
+  const isLogged =
+    !!auth?.token &&
+    auth?.expiresAt &&
+    new Date(auth.expiresAt) > new Date();
 
   return (
     <Navbar bg="light" data-bs-theme="light">
