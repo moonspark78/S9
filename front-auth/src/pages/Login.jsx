@@ -9,21 +9,18 @@ import {
   Alert,
 } from "react-bootstrap";
 import { useNavigate } from "react-router";
+import { useDispatch } from "react-redux";
+import { loginSuccess } from "../store/authSlice.js";
 
 const LoginPage = () => {
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-  });
+  const dispatch = useDispatch();
+  const [formData, setFormData] = useState({ email: "", password: "" });
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async (e) => {
@@ -44,8 +41,9 @@ const LoginPage = () => {
         }
       );
 
+      const data = await response.json();
+
       if (!response.ok) {
-        const data = await response.json();
         const customError = new Error(
           data.message || "Une erreur est survenue."
         );
@@ -53,21 +51,23 @@ const LoginPage = () => {
         throw customError;
       }
 
-      const data = await response.json();
+      dispatch(
+        loginSuccess({
+          token: data.access_token,
+          expiresAt: new Date(
+            Date.now() + data.expires_in * 1000
+          ).toISOString(),
+        })
+      );
+
       navigate("/offres/professionnelles");
     } catch (err) {
       console.error(err);
-
-      if (err.status === 401) {
-        setError("Email ou mot de passe incorrect.");
-      } else {
-        setError("Une erreur est survenue. Veuillez réessayer plus tard.");
-      }
+      if (err.status === 401) setError("Email ou mot de passe incorrect.");
+      else setError("Une erreur est survenue. Veuillez réessayer plus tard.");
     } finally {
       setLoading(false);
     }
-
-    console.log("Login submitted:", formData);
   };
 
   return (
@@ -92,7 +92,6 @@ const LoginPage = () => {
                   required
                 />
               </Form.Group>
-
               <Form.Group className="mb-4" controlId="loginPassword">
                 <Form.Label>Mot de passe</Form.Label>
                 <Form.Control
@@ -103,9 +102,13 @@ const LoginPage = () => {
                   required
                 />
               </Form.Group>
-
-              <Button variant="primary" type="submit" className="w-100">
-                Se connecter
+              <Button
+                variant="primary"
+                type="submit"
+                className="w-100"
+                disabled={loading}
+              >
+                {loading ? "Connexion..." : "Se connecter"}
               </Button>
             </Form>
           </Card>

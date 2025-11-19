@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
+import { useSelector } from "react-redux";
 import { Container, Card, Spinner, Alert } from "react-bootstrap";
 
 const Offer = () => {
   const { id } = useParams();
+  const token = useSelector((state) => state.auth.token);
   const [offer, setOffer] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -16,32 +18,27 @@ const Offer = () => {
           {
             headers: {
               Accept: "application/json",
-              // Add Authorization token
+              Authorization: `Bearer ${token}`,
             },
           }
         );
 
-        const { data: offers, message } = await response.json();
-        
-        if (!response.ok) {
-          throw { status: response.status, message: message };
-        }
+        const data = await response.json();
 
-        setOffer(offers);
+        if (!response.ok)
+          throw new Error(data.message || `Erreur ${response.status}`);
+        setOffer(data);
       } catch (err) {
-        if (err.status === 403) {
-          setError("Accès non autorisé (403).");
-        } else {
-          setError("Erreur lors du chargement de l'offre.");
-        }
-        console.error(err.message || err);
+        console.error(err);
+        setError(err.message);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchOffer();
-  }, [id]);
+    if (token) fetchOffer();
+    else setError("Utilisateur non connecté.");
+  }, [id, token]);
 
   if (loading)
     return <Spinner animation="border" className="d-block mx-auto mt-5" />;
