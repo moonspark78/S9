@@ -1,20 +1,15 @@
-import { useEffect } from 'react';
-
+import { useEffect } from "react";
+import { useNavigate } from "react-router";
 
 const Logout = () => {
-   useEffect(() => {
-    const handleLogout = async () => {
-      // (1) Appel API pour notifier la déconnexion
+  const navigate = useNavigate();
 
-      // (2) Suppression du token côté frontend
-
-      // (3) Redirection vers la page de login
-    };
-
-    handleLogout();
+  useEffect(() => {
+    localStorage.removeItem("auth");
+    navigate("/connexion");
   }, []);
 
-  return null; // Pas besoin d'afficher quoi que ce soit
+  return null; 
 };
 
 export default Logout;
