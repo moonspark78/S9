@@ -44,15 +44,9 @@ const LoginPage = () => {
         }
       );
 
-      
-      if (!response.ok) {
-        let data = {};
-        try {
-          data = await response.json();
-        } catch (e) {
-          
-        }
+      const data = await response.json();
 
+      if (!response.ok) {
         const customError = new Error(
           data.message || "Une erreur est survenue."
         );
@@ -60,8 +54,6 @@ const LoginPage = () => {
         throw customError;
       }
 
-      
-      const data = await response.json();
 
       localStorage.setItem(
         "auth",
