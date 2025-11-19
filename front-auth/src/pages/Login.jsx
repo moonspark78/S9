@@ -44,17 +44,20 @@ const LoginPage = () => {
         }
       );
 
-      const data = await response.json();
       if (!response.ok) {
+        const data = await response.json();
         const customError = new Error(
           data.message || "Une erreur est survenue."
         );
         customError.status = response.status;
         throw customError;
       }
+
+      const data = await response.json();
       navigate("/offres/professionnelles");
     } catch (err) {
       console.error(err);
+
       if (err.status === 401) {
         setError("Email ou mot de passe incorrect.");
       } else {
