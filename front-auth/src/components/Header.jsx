@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import "../assets/styles/Header.css";
 
 function Header() {
-  const auth = useSelector((state) => state.auth.user); 
+  const auth = useSelector((state) => state.auth); 
   
   const isLogged =
     !!auth?.token &&
