@@ -27,6 +27,7 @@ const Logout = () => {
       } catch (error) {
         console.error(error.message);
       } finally {
+        localStorage.removeItem("auth");
         navigate("/connexion");
       }
     };
