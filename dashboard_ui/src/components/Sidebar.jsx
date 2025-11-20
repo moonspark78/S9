@@ -1,15 +1,21 @@
+import { Drawer, List, ListItemButton, ListItemIcon } from "@mui/material";
 import {
-  Drawer,
-  List,
-  ListItemButton,
-  ListItemIcon,
-} from "@mui/material";
-import HomeIcon from "@mui/icons-material/Home";
-import GridViewIcon from "@mui/icons-material/GridView";
-import AddIcon from "@mui/icons-material/Add";
-import PeopleIcon from "@mui/icons-material/People";
-import BarChartIcon from "@mui/icons-material/BarChart";
-import SettingsIcon from "@mui/icons-material/Settings";
+  Home as HomeIcon,
+  GridView as GridViewIcon,
+  Add as AddIcon,
+  People as PeopleIcon,
+  BarChart as BarChartIcon,
+  Settings as SettingsIcon,
+} from "@mui/icons-material";
+
+const icons = [
+  HomeIcon,
+  GridViewIcon,
+  AddIcon,
+  PeopleIcon,
+  BarChartIcon,
+  SettingsIcon,
+];
 
 export default function Sidebar() {
   return (
@@ -21,41 +27,13 @@ export default function Sidebar() {
       }}
     >
       <List sx={{ mt: 8 }}>
-        <ListItemButton sx={{ justifyContent: "center" }}>
-          <ListItemIcon sx={{ minWidth: 0, color: "#403c3c" }}>
-            <HomeIcon />
-          </ListItemIcon>
-        </ListItemButton>
-
-        <ListItemButton sx={{ justifyContent: "center" }}>
-          <ListItemIcon sx={{ minWidth: 0, color: "#403c3c" }}>
-            <GridViewIcon />
-          </ListItemIcon>
-        </ListItemButton>
-
-        <ListItemButton sx={{ justifyContent: "center" }}>
-          <ListItemIcon sx={{ minWidth: 0, color: "#403c3c" }}>
-            <AddIcon />
-          </ListItemIcon>
-        </ListItemButton>
-
-        <ListItemButton sx={{ justifyContent: "center" }}>
-          <ListItemIcon sx={{ minWidth: 0, color: "#403c3c" }}>
-            <PeopleIcon />
-          </ListItemIcon>
-        </ListItemButton>
-
-        <ListItemButton sx={{ justifyContent: "center" }}>
-          <ListItemIcon sx={{ minWidth: 0, color: "#403c3c" }}>
-            <BarChartIcon />
-          </ListItemIcon>
-        </ListItemButton>
-
-        <ListItemButton sx={{ justifyContent: "center" }}>
-          <ListItemIcon sx={{ minWidth: 0, color: "#403c3c" }}>
-            <SettingsIcon />
-          </ListItemIcon>
-        </ListItemButton>
+        {icons.map((IconComponent, index) => (
+          <ListItemButton key={index} sx={{ justifyContent: "center" }}>
+            <ListItemIcon sx={{ minWidth: 0, color: "#403c3c" }}>
+              <IconComponent />
+            </ListItemIcon>
+          </ListItemButton>
+        ))}
       </List>
     </Drawer>
   );
