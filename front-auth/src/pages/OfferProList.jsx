@@ -22,14 +22,20 @@ const OfferProList = () => {
           }
         );
 
-        const data = await response.json();
-        setOffers(Array.isArray(data.data) ? data.data : []);
+        const { data: offers, message } = await response.json();
+        
+        if (!response.ok) {
+          throw { status: response.status, message: message };
+        }
 
-        if (!response.ok)
-          throw new Error(data.message || `Erreur ${response.status}`);
+        setOffers(offers);
       } catch (err) {
-        console.error(err);
-        setError(err.message || "Une erreur est survenue.");
+        if (err.status === 403) {
+          setError("Accès non autorisé (403).");
+        } else {
+          setError("Erreur lors du chargement de l'offre.");
+        }
+        console.error(err.message || err);
       } finally {
         setLoading(false);
       }
