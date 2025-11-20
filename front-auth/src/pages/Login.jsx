@@ -45,8 +45,8 @@ const LoginPage = () => {
         }
       );
 
+      const data = await response.json();
       if (!response.ok) {
-        const data = await response.json();
         const customError = new Error(
           data.message || "Une erreur est survenue."
         );
