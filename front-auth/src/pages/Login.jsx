@@ -41,6 +41,7 @@ const LoginPage = () => {
             Accept: "application/json",
           },
           body: JSON.stringify(formData),
+          credentials: "include",
         }
       );
 
@@ -52,8 +53,10 @@ const LoginPage = () => {
         customError.status = response.status;
         throw customError;
       }
+      const expiresAt = new Date();
+      expiresAt.setHours(expiresAt.getHours() + 2);
+      localStorage.setItem("auth", JSON.stringify({ expiresAt }));
 
-      const data = await response.json();
       navigate("/offres/professionnelles");
     } catch (err) {
       console.error(err);
