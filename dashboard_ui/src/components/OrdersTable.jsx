@@ -20,7 +20,7 @@ export default function OrdersTable() {
   ];
 
   return (
-    <Card sx={{ boxShadow: '0 2px 8px rgba(0,0,0,0.08)' }}>
+    <Card sx={{ boxShadow: '0 2px 8px rgba(0,0,0,0.06)' }}>
       <CardContent>
         <Typography variant="h6" sx={{ marginBottom: 2, fontWeight: 500 }}>
           Dernières commandes

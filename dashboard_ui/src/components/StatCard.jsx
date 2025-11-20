@@ -6,7 +6,7 @@ export default function StatCard({ icon, value, label }) {
       sx={{ 
         flex: 1,
         minWidth: 250,
-        boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+        boxShadow: '0 2px 8px rgba(0,0,0,0.3)',
       }}
     >
       <CardContent>
