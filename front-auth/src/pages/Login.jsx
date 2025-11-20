@@ -53,9 +53,17 @@ const LoginPage = () => {
         customError.status = response.status;
         throw customError;
       }
-      const expiresAt = new Date();
-      expiresAt.setHours(expiresAt.getHours() + 2);
-      localStorage.setItem("auth", JSON.stringify({ expiresAt }));
+
+      const expiresAt = new Date(
+        Date.now() + data.expires_in * 1000
+      ).toISOString();
+      localStorage.setItem(
+        "auth",
+        JSON.stringify({
+          user: data.user,
+          expiresAt,
+        })
+      );
 
       navigate("/offres/professionnelles");
     } catch (err) {
