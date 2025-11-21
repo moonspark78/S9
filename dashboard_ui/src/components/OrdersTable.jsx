@@ -9,6 +9,7 @@ import {
   TableHead, 
   TableRow,
   Divider,
+  Paper,
 } from '@mui/material';
 
 export default function OrdersTable() {
@@ -25,7 +26,7 @@ export default function OrdersTable() {
         <Typography variant="h6" sx={{ marginBottom: 2, fontWeight: 500 }}>
           Dernières commandes
         </Typography>
-        <TableContainer>
+        <TableContainer component={Paper}>
           <Table>
             <TableHead>
               <TableRow>
@@ -53,7 +54,7 @@ export default function OrdersTable() {
             </TableBody>
           </Table>
         </TableContainer>
-        <Divider sx={{ borderBottomWidth: 3, bgcolor: 'grey.600' }} />
+        {/* <Divider sx={{ borderBottomWidth: 3, bgcolor: 'grey.600' }} /> */}
       </CardContent>
     </Card>
   );
